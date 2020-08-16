@@ -20,11 +20,11 @@ public class HeaderUtils {
     public Cookie setCookie(HttpServletResponse response,String userName){
         Cookie cookie = new Cookie("userName",userName);
         cookie.setHttpOnly(true);
-        cookie.setMaxAge(24*60*60);
+        cookie.setMaxAge(24*60*60*60);
         response.addCookie(cookie);
         return cookie;
     }
-// oinoinon
+
     public HttpHeaders setHeaders(Cookie cookie){
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type","application/json");
