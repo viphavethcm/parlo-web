@@ -3,7 +3,6 @@ package com.nhatduy.parloweb.serviceImpl;
 import com.nhatduy.parloweb.dao.UserRepository;
 import com.nhatduy.parloweb.entity.User;
 import com.nhatduy.parloweb.exception.UserNotFoundException;
-import com.nhatduy.parloweb.service.ProtectService;
 import com.nhatduy.parloweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
