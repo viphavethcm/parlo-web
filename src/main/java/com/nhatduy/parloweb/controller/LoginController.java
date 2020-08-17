@@ -1,5 +1,6 @@
 package com.nhatduy.parloweb.controller;
 
+import com.nhatduy.parloweb.constants.SystemConstants;
 import com.nhatduy.parloweb.entity.AuthRequest;
 import com.nhatduy.parloweb.entity.AuthResponse;
 import com.nhatduy.parloweb.entity.User;
@@ -13,6 +14,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +23,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.CookieGenerator;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 
 @RestController
 @Api(description = "User login,Authorization,Authentication")
@@ -45,10 +46,9 @@ public class LoginController {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 502, message = "Invalid Username or Password")
     })
-    public ResponseEntity<?> createAuthenticationToken(HttpSession session, HttpServletResponse response, @RequestBody AuthRequest authRequest) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(HttpSession session ,HttpServletResponse response, @RequestBody AuthRequest authRequest) throws Exception {
         ProtectService protectService = new ProtectServiceImpl();
         ResponseEntity responseEntity = null;
-        HttpHeaders headers;
         if (protectService.SQL_Injection(authRequest) == false) {
             try {
                 authenticationManager.authenticate(
@@ -57,18 +57,19 @@ public class LoginController {
             } catch (BadCredentialsException e) {
                 throw new Exception("Invalid Username or Password", e);
             }
+            // check UseDetails
             final UserDetails userDetails = userService.loadUserByUsername(authRequest.getUserName());
-
+            // if Not null --> set Token and Cookie through JSESSIONID
             if (userDetails != null) {
-                session.setAttribute("userName", userDetails);
-                Cookie cookie = HeaderUtils.getInstance().setCookie(response, authRequest.getUserName());
-                response.addCookie(cookie);
-                headers = HeaderUtils.getInstance().setHeaders(cookie);
                 final String token = jwtUtil.generateToken(userDetails);
-                responseEntity =new ResponseEntity<>(new AuthResponse(token), headers, HttpStatus.OK);
-            } else {
-                headers = HeaderUtils.getInstance().setHeaders(null);
-                responseEntity = new ResponseEntity<>(new UserErrorResponse(400, "Invalid Username or Password", System.currentTimeMillis()), headers, HttpStatus.BAD_REQUEST);
+                responseEntity =new ResponseEntity<>(new AuthResponse(authRequest.getUserName(),token),
+                                                        HeaderUtils.getInstance().setHeaders(), HttpStatus.OK);
+            }// if null --> return UserError
+            else {
+                responseEntity = new ResponseEntity<>(
+                        new UserErrorResponse(400, "Invalid Username or Password",
+                                                System.currentTimeMillis()), null,
+                                                HttpStatus.BAD_REQUEST);
             }
         }
         return responseEntity;
