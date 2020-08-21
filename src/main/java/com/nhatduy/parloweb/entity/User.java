@@ -1,6 +1,7 @@
 package com.nhatduy.parloweb.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -8,6 +9,7 @@ import java.util.List;
 public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "userID")
     private int userID;
 
     @Column(name = "username")
@@ -19,13 +21,27 @@ public class User{
     @Column(name = "active")
     private boolean active;
 
+    @Column(name = "created_Date")
+    private String created_Date;
+
+
+    @Column(name = "modified_Date")
+    private String modified_Date;
+
+
     @ManyToMany(fetch = FetchType.LAZY,targetEntity = Role.class,
-            cascade = {CascadeType.DETACH, CascadeType.MERGE,
-                    CascadeType.PERSIST, CascadeType.REFRESH})
+            cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "userID"),
             inverseJoinColumns = @JoinColumn(name = "roleID"))
     private List<Role> roles;
+
+    public void addRole(Role role){
+        if (roles == null){
+            roles = new ArrayList<>();
+        }
+        roles.add(role);
+    }
 
     public int getUserID() {
         return userID;
@@ -53,6 +69,22 @@ public class User{
 
     public boolean isActive() {
         return active;
+    }
+
+    public String getCreated_Date() {
+        return created_Date;
+    }
+
+    public void setCreated_Date(String created_Date) {
+        this.created_Date = created_Date;
+    }
+
+    public String getModified_Date() {
+        return modified_Date;
+    }
+
+    public void setModified_Date(String modified_Date) {
+        this.modified_Date = modified_Date;
     }
 
     public void setActive(boolean active) {

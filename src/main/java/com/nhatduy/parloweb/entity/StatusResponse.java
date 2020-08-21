@@ -1,17 +1,17 @@
 package com.nhatduy.parloweb.entity;
 
-public class UserErrorResponse {
+public class StatusResponse {
     private int status;
     private String message;
     private long timeStamp;
 
-    public UserErrorResponse(int status, String message, long timeStamp) {
+    public StatusResponse(int status, String message, long timeStamp) {
         this.status = status;
         this.message = message;
         this.timeStamp = timeStamp;
     }
 
-    public UserErrorResponse(){
+    public StatusResponse(){
 
     }
 

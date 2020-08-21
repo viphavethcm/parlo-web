@@ -1,10 +1,9 @@
 package com.nhatduy.parloweb.controller;
 
-import com.nhatduy.parloweb.constants.SystemConstants;
 import com.nhatduy.parloweb.entity.AuthRequest;
 import com.nhatduy.parloweb.entity.AuthResponse;
 import com.nhatduy.parloweb.entity.User;
-import com.nhatduy.parloweb.entity.UserErrorResponse;
+import com.nhatduy.parloweb.entity.StatusResponse;
 import com.nhatduy.parloweb.service.ProtectService;
 import com.nhatduy.parloweb.service.UserService;
 import com.nhatduy.parloweb.serviceImpl.ProtectServiceImpl;
@@ -43,7 +42,7 @@ public class LoginController {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 502, message = "Invalid Username or Password")
     })
-    public ResponseEntity<?> createAuthenticationToken(HttpSession session ,HttpServletResponse response, @RequestBody AuthRequest authRequest) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(HttpSession session, @RequestBody AuthRequest authRequest) throws Exception {
         ProtectService protectService = new ProtectServiceImpl();
         ResponseEntity responseEntity = null;
         if (protectService.SQL_Injection(authRequest) == false) {
@@ -52,7 +51,7 @@ public class LoginController {
                         new UsernamePasswordAuthenticationToken(authRequest.getUserName(), authRequest.getPassword())
                 );
             } catch (BadCredentialsException e) {
-                throw new Exception("Invalid Username or Password", e);
+                throw new BadCredentialsException("Invalid Username or Password", e);
             }
             // check UseDetails
             final UserDetails userDetails = userService.loadUserByUsername(authRequest.getUserName());
@@ -64,9 +63,9 @@ public class LoginController {
             }// if null --> return UserError
             else {
                 responseEntity = new ResponseEntity<>(
-                        new UserErrorResponse(400, "Invalid Username or Password",
-                                                System.currentTimeMillis()), null,
-                                                HttpStatus.BAD_REQUEST);
+                                new StatusResponse(502, "Invalid Username or Password",
+                                System.currentTimeMillis()), null,
+                                HttpStatus.BAD_GATEWAY);
             }
         }
         return responseEntity;

@@ -21,6 +21,7 @@
         <jwt.version>1.1.1.RELEASE</jwt.version>
         <jwttoken.version>0.9.1</jwttoken.version>
         <swagger.version>3.0.0</swagger.version>
+        <spring-boot-validator-version>2.3.2.RELEASE</spring-boot-validator-version>
     </properties>
 
     <dependencies>
@@ -82,6 +83,14 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
+        <!-- spring-boot-starter-validation -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+            <version>${spring-boot-validator-version}</version>
+        </dependency>
+
+
         <!-- spring-boot-starter-data-rest -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -94,7 +103,6 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql.version}</version>
         </dependency>
-
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
