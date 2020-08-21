@@ -19,8 +19,7 @@ public class Role {
     private String roleName;
 
     @ManyToMany(mappedBy = "roles",fetch = FetchType.LAZY,
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-                    CascadeType.DETACH, CascadeType.REFRESH})
+            cascade = { CascadeType.MERGE,CascadeType.REFRESH})
     private List<User> users;
 
     public int getRoleID() {

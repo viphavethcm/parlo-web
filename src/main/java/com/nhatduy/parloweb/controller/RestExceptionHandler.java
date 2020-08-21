@@ -1,9 +1,10 @@
 package com.nhatduy.parloweb.controller;
 
-import com.nhatduy.parloweb.entity.UserErrorResponse;
+import com.nhatduy.parloweb.entity.StatusResponse;
 import com.nhatduy.parloweb.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -14,8 +15,8 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<UserErrorResponse> handleException(UserNotFoundException exc){
-        UserErrorResponse error = new UserErrorResponse();
+    public ResponseEntity<StatusResponse> handleException(UserNotFoundException exc){
+        StatusResponse error = new StatusResponse();
         error.setStatus(HttpStatus.NOT_FOUND.value());
         error.setMessage(exc.getMessage());
         error.setTimeStamp(System.currentTimeMillis());
@@ -23,11 +24,20 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<UserErrorResponse> handleException(Exception exc){
-        UserErrorResponse error = new UserErrorResponse();
+    public ResponseEntity<StatusResponse> handleException(Exception exc){
+        StatusResponse error = new StatusResponse();
         error.setStatus(HttpStatus.BAD_REQUEST.value());
         error.setMessage(exc.getMessage());
         error.setTimeStamp(System.currentTimeMillis());
         return new ResponseEntity<>(error,HttpStatus.BAD_GATEWAY);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<StatusResponse> handleException(BadCredentialsException exc){
+        StatusResponse error = new StatusResponse();
+        error.setStatus(HttpStatus.UNAUTHORIZED.value());
+        error.setMessage(exc.getMessage());
+        error.setTimeStamp(System.currentTimeMillis());
+        return new ResponseEntity<>(error,HttpStatus.UNAUTHORIZED);
     }
 }
