@@ -9,31 +9,31 @@ import java.util.List;
 public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "userID")
+    @Column(name = "UserID")
     private int userID;
 
-    @Column(name = "username")
+    @Column(name = "UserName")
     private String userName;
 
-    @Column(name = "password")
+    @Column(name = "Password")
     private String password;
 
-    @Column(name = "active")
+    @Column(name = "Active")
     private boolean active;
 
-    @Column(name = "created_Date")
+    @Column(name = "Created_Date")
     private String created_Date;
 
 
-    @Column(name = "modified_Date")
+    @Column(name = "Modified_Date")
     private String modified_Date;
 
 
-    @ManyToMany(fetch = FetchType.LAZY,targetEntity = Role.class,
+    @ManyToMany(fetch = FetchType.LAZY,
             cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(name = "user_role",
-            joinColumns = @JoinColumn(name = "userID"),
-            inverseJoinColumns = @JoinColumn(name = "roleID"))
+            joinColumns = @JoinColumn(name = "UserID"),
+            inverseJoinColumns = @JoinColumn(name = "RoleID"))
     private List<Role> roles;
 
     public void addRole(Role role){

@@ -26,7 +26,7 @@ public class RestExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<StatusResponse> handleException(Exception exc){
         StatusResponse error = new StatusResponse();
-        error.setStatus(HttpStatus.BAD_REQUEST.value());
+        error.setStatus(HttpStatus.BAD_GATEWAY.value());
         error.setMessage(exc.getMessage());
         error.setTimeStamp(System.currentTimeMillis());
         return new ResponseEntity<>(error,HttpStatus.BAD_GATEWAY);
