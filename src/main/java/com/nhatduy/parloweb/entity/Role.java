@@ -7,15 +7,14 @@ import java.util.List;
 
 @Entity
 @Table(name = "role")
-@JsonIgnoreProperties("users")
 public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "roleID")
+    @Column(name = "RoleID")
     private int roleID;
 
-    @Column(name = "roleName")
+    @Column(name = "RoleName")
     private String roleName;
 
     @ManyToMany(mappedBy = "roles",fetch = FetchType.LAZY,

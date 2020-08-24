@@ -51,7 +51,7 @@ public class LoginController {
                         new UsernamePasswordAuthenticationToken(authRequest.getUserName(), authRequest.getPassword())
                 );
             } catch (BadCredentialsException e) {
-                throw new BadCredentialsException("Invalid Username or Password", e);
+                throw new Exception("Invalid Username or Password", e);
             }
             // check UseDetails
             final UserDetails userDetails = userService.loadUserByUsername(authRequest.getUserName());

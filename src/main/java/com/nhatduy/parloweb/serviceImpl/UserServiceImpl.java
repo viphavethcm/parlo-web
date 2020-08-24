@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
         userDTO.setUserName(user.getUserName());
         userDTO.setPassword(user.getPassword());
         userDTO.setActive(user.isActive());
-        userDTO.setCreated_Date(user.getModified_Date());
+        userDTO.setCreated_Date(user.getCreated_Date());
         userDTO.setModified_Date(user.getModified_Date());
         for (Role role :user.getRoles()){
             RoleDTO roleDTO = new RoleDTO();
