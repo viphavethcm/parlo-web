@@ -1,6 +1,7 @@
 package com.nhatduy.parloweb.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,6 +25,13 @@ public class Categories {
 
     @OneToMany(mappedBy = "categories",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Sub_Categories> sub_categories;
+
+    public void addSub_Categories(Sub_Categories sub_category){
+        if (sub_categories == null){
+            sub_categories = new ArrayList<>();
+        }
+        sub_categories.add(sub_category);
+    }
 
 
     public int getCategoryID() {

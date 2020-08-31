@@ -27,7 +27,7 @@ public class ParlowebApplication {
     public Docket swaggerConfiguration(){
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .paths(PathSelectors.ant("/api/**").or(PathSelectors.ant("/authenticate")))
+                .paths(PathSelectors.ant("/v2/**"))
                 .apis(RequestHandlerSelectors.any())
                 .build()
                 .apiInfo(apiInfo())
