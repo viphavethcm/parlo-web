@@ -3,7 +3,7 @@ package com.nhatduy.parloweb.dto;
 public class Sub_CategoriesDTO {
 
     private Integer sub_CategoryID;
-    private String sub_categoryName;
+    private String sub_CategoryName;
     private String created_Date;
     private String modified_Date;
 
@@ -15,12 +15,12 @@ public class Sub_CategoriesDTO {
         this.sub_CategoryID = sub_CategoryID;
     }
 
-    public String getSub_categoryName() {
-        return sub_categoryName;
+    public String getSub_CategoryName() {
+        return sub_CategoryName;
     }
 
-    public void setSub_categoryName(String sub_categoryName) {
-        this.sub_categoryName = sub_categoryName;
+    public void setSub_CategoryName(String sub_CategoryName) {
+        this.sub_CategoryName = sub_CategoryName;
     }
 
     public String getCreated_Date() {

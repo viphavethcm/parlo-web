@@ -98,19 +98,21 @@ public class UserServiceImpl implements UserService {
         return userDTO ;
     }
 
-    @Override
     public User convertToModel(UserDTO userDTO) {
         User user = new User();
-        if (userDTO.getCreated_Date() == null){
-            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        if (userDTO.getUserID() != 0){
+            userDTO.setModified_Date(SystemUtils.convertToDate(timestamp));
+        }
+        else {
             userDTO.setCreated_Date(SystemUtils.convertToDate(timestamp));
         }
         user.setUserID(userDTO.getUserID());
         user.setUserName(userDTO.getUserName());
         user.setPassword(passwordEncoder(userDTO.getPassword()));
         user.setActive(true);
-        user.setCreated_Date(userDTO.getCreated_Date());
         user.setModified_Date(userDTO.getModified_Date());
+        user.setCreated_Date(userDTO.getCreated_Date());
         for (RoleDTO roleDTO :userDTO.getRoles()){
             Role role = new Role();
             role.setRoleID(roleDTO.getRoleID());

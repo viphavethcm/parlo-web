@@ -17,7 +17,6 @@ public class RestExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<StatusResponse> handleException(UserNotFoundException exc){
         StatusResponse error = new StatusResponse();
-        error.setStatus(HttpStatus.NOT_FOUND.value());
         error.setMessage(exc.getMessage());
         error.setTimeStamp(System.currentTimeMillis());
         return new ResponseEntity<>(error,HttpStatus.NOT_FOUND);
@@ -26,7 +25,6 @@ public class RestExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<StatusResponse> handleException(Exception exc){
         StatusResponse error = new StatusResponse();
-        error.setStatus(HttpStatus.BAD_GATEWAY.value());
         error.setMessage(exc.getMessage());
         error.setTimeStamp(System.currentTimeMillis());
         return new ResponseEntity<>(error,HttpStatus.BAD_GATEWAY);
@@ -35,7 +33,6 @@ public class RestExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<StatusResponse> handleException(BadCredentialsException exc){
         StatusResponse error = new StatusResponse();
-        error.setStatus(HttpStatus.UNAUTHORIZED.value());
         error.setMessage(exc.getMessage());
         error.setTimeStamp(System.currentTimeMillis());
         return new ResponseEntity<>(error,HttpStatus.UNAUTHORIZED);

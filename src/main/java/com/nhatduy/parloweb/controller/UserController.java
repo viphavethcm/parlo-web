@@ -1,11 +1,11 @@
 package com.nhatduy.parloweb.controller;
 
+import com.nhatduy.parloweb.constants.SystemConstants;
 import com.nhatduy.parloweb.dto.UserDTO;
 import com.nhatduy.parloweb.entity.StatusResponse;
 import com.nhatduy.parloweb.entity.User;
 import com.nhatduy.parloweb.exception.UserNotFoundException;
 import com.nhatduy.parloweb.service.UserService;
-import com.nhatduy.parloweb.utils.HeaderUtils;
 import com.nhatduy.parloweb.utils.SystemUtils;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/v2")
 @Api(description = "User Resources")
 public class UserController {
 
@@ -24,11 +22,11 @@ public class UserController {
     private UserService userService;
 
     // find All
-    @GetMapping("/users")
+    @GetMapping("/admin/users")
     @ApiOperation(value = "Get List of User",
                     response = User.class)
-    public List<UserDTO> getList(){
-        return userService.findAll();
+    public ResponseEntity<?> getList(){
+        return new ResponseEntity<>(userService.findAll(),null,HttpStatus.OK);
     }
 
     // get User by ID
@@ -37,13 +35,12 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200,message = "OK"),
     })
-    public UserDTO getUserbyID(@ApiParam(value = "UserID is required",required = true)@PathVariable int userID){
-
+    public ResponseEntity<?> getUserbyID(@ApiParam(value = "UserID is required",required = true)@PathVariable int userID){
         UserDTO userDTO = userService.findbyId(userID);
         if (userDTO == null){
             throw new RuntimeException("User not found -"+userID);
         }
-        return userDTO;
+        return new ResponseEntity<>(userDTO,null,HttpStatus.OK);
     }
     // add User
     @PostMapping("/users")
@@ -54,19 +51,15 @@ public class UserController {
     })
     public ResponseEntity<?> addUser(@ApiParam(value = "Username & Password is required",required = true)@RequestBody UserDTO userDTO){
         ResponseEntity responseEntity= null;
-        if (SystemUtils.checkPattern(userDTO.getUserName(),userDTO.getPassword())){
+        if (SystemUtils.PATTERN_ADD_USER(userDTO.getUserName(),userDTO.getPassword())){
             userDTO.setUserID(0);
             userService.save(userDTO);
             responseEntity = new ResponseEntity<>(
-                            new StatusResponse(200, "Successfull",
-                            System.currentTimeMillis()), HeaderUtils.getInstance().setHeaders(),
-                            HttpStatus.OK);
+                    new StatusResponse(SystemConstants.MESSAGE_200,System.currentTimeMillis()),HttpStatus.OK);
         }
         else {
             responseEntity = new ResponseEntity<>(
-                            new StatusResponse(502, "Something went wrong",
-                            System.currentTimeMillis()), null,
-                            HttpStatus.BAD_GATEWAY);
+                    new StatusResponse(SystemConstants.MESSAGE_502,System.currentTimeMillis()),HttpStatus.BAD_GATEWAY);
         }
         return responseEntity;
     }
@@ -74,23 +67,31 @@ public class UserController {
     // update User
     @PutMapping("/users")
     @ApiOperation(value = "Update User")
-    public UserDTO updateUser(@RequestBody UserDTO userDTO){
-        if (SystemUtils.checkPattern(userDTO.getUserName(),userDTO.getPassword())){
+    public ResponseEntity<?> updateUser(@RequestBody UserDTO userDTO){
+        ResponseEntity responseEntity;
+        if (SystemUtils.PATTERN_ADD_USER(userDTO.getUserName(),userDTO.getPassword())){
             userService.save(userDTO);
+            responseEntity = new ResponseEntity(
+                    new StatusResponse(SystemConstants.MESSAGE_200,System.currentTimeMillis()),HttpStatus.OK);
         }
-        return userDTO;
+        else {
+            responseEntity = new ResponseEntity<>(
+                    new StatusResponse(SystemConstants.MESSAGE_502,System.currentTimeMillis()),HttpStatus.BAD_GATEWAY);
+        }
+        return responseEntity;
     }
 
     // delete User
-    @DeleteMapping("/users/{userID}")
+    @DeleteMapping("/admin/users/{userID}")
     @ApiOperation(value = "Delete User by ID")
-    public String deleteEmployee(@ApiParam(value = "UserID is required",required = true)@PathVariable int userID){
+    public ResponseEntity<?> deleteEmployee(@ApiParam(value = "UserID is required",required = true)@PathVariable int userID){
         UserDTO userDTO = userService.findbyId(userID);
         if (userDTO == null){
             throw new UserNotFoundException("User not found-"+userID);
         }
         userService.deletebyId(userID);
-        return "Delete Sucessfull User ID-"+userID;
+        return new ResponseEntity<>(
+                new StatusResponse(SystemConstants.MESSAGE_200,System.currentTimeMillis()),HttpStatus.OK);
     }
 
 }

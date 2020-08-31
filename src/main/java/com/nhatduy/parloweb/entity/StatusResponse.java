@@ -1,26 +1,16 @@
 package com.nhatduy.parloweb.entity;
 
 public class StatusResponse {
-    private int status;
     private String message;
     private long timeStamp;
 
-    public StatusResponse(int status, String message, long timeStamp) {
-        this.status = status;
+    public StatusResponse(String message, long timeStamp) {
         this.message = message;
         this.timeStamp = timeStamp;
     }
 
     public StatusResponse(){
 
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 
     public String getMessage() {

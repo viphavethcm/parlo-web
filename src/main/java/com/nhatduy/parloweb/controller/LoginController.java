@@ -26,6 +26,7 @@ import javax.servlet.http.*;
 @RestController
 @Api(description = "User login,Authorization,Authentication")
 @SessionAttributes(value = "userName",types = {User.class})
+@RequestMapping("/v2")
 public class LoginController {
 
     @Autowired
@@ -63,9 +64,7 @@ public class LoginController {
             }// if null --> return UserError
             else {
                 responseEntity = new ResponseEntity<>(
-                                new StatusResponse(502, "Invalid Username or Password",
-                                System.currentTimeMillis()), null,
-                                HttpStatus.BAD_GATEWAY);
+                        new StatusResponse("Invalid Username or Password", System.currentTimeMillis()), HttpStatus.BAD_GATEWAY);
             }
         }
         return responseEntity;

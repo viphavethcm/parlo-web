@@ -11,7 +11,7 @@ public class Sub_Categories {
     private int sub_CategoryID;
 
     @Column(name = "Sub_CategoryName")
-    private String sub_categoryName;
+    private String sub_CategoryName;
 
     @Column(name = "Created_Date")
     private String created_Date;
@@ -31,12 +31,12 @@ public class Sub_Categories {
         this.sub_CategoryID = sub_CategoryID;
     }
 
-    public String getSub_categoryName() {
-        return sub_categoryName;
+    public String getSub_CategoryName() {
+        return sub_CategoryName;
     }
 
-    public void setSub_categoryName(String sub_categoryName) {
-        this.sub_categoryName = sub_categoryName;
+    public void setSub_CategoryName(String sub_CategoryName) {
+        this.sub_CategoryName = sub_CategoryName;
     }
 
     public String getCreated_Date() {
