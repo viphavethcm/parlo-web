@@ -28,7 +28,6 @@ public class CategoriesServiceImpl implements CategoriesService {
         categoriesRepository.save(convertToModel(categoriesDTO));
     }
 
-
     public Categories convertToModel(CategoriesDTO categoriesDTO){
         Categories categories = new Categories();
         categories.setID(categoriesDTO.getID());
