@@ -1,9 +1,15 @@
 package com.nhatduy.parloweb.dto;
 
+import com.nhatduy.parloweb.entity.Role;
+
 public class RoleDTO {
     private Integer roleID;
     private String roleName;
 
+    public RoleDTO(Integer roleID, String roleName) {
+        this.roleID = roleID;
+        this.roleName = roleName;
+    }
     public Integer getRoleID() {
         return roleID;
     }

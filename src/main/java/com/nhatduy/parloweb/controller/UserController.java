@@ -11,6 +11,8 @@ import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,7 +24,8 @@ public class UserController {
     private UserService userService;
 
     // find All
-    @GetMapping("/admin/users")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/users")
     @ApiOperation(value = "Get List of User",
                     response = User.class)
     public ResponseEntity<?> getList(){
@@ -82,7 +85,8 @@ public class UserController {
     }
 
     // delete User
-    @DeleteMapping("/admin/users/{userID}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/users/{userID}")
     @ApiOperation(value = "Delete User by ID")
     public ResponseEntity<?> deleteEmployee(@ApiParam(value = "UserID is required",required = true)@PathVariable int userID){
         UserDTO userDTO = userService.findbyId(userID);

@@ -7,6 +7,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "role")
+@JsonIgnoreProperties(value = "users")
 public class Role {
 
     @Id
@@ -20,6 +21,13 @@ public class Role {
     @ManyToMany(mappedBy = "roles",fetch = FetchType.LAZY,
             cascade = { CascadeType.MERGE,CascadeType.REFRESH})
     private List<User> users;
+
+    public Role(int roleID, String roleName) {
+        this.roleID = roleID;
+        this.roleName = roleName;
+    }
+
+    public Role(){}
 
     public int getRoleID() {
         return roleID;

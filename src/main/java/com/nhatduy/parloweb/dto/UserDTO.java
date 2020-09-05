@@ -1,5 +1,7 @@
 package com.nhatduy.parloweb.dto;
 
+import com.nhatduy.parloweb.entity.User;
+
 import java.util.List;
 
 public class UserDTO {

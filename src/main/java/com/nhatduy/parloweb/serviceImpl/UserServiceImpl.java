@@ -17,7 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,11 +29,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDTO> findAll() {
-        List<UserDTO> listDTO = new ArrayList<>();
-        for (User user:userRepository.findAll()){
-            listDTO.add(converToDTO(user));
-        }
-        return listDTO;
+        return userRepository.findAll().stream()
+                .map(this::converToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -69,7 +66,7 @@ public class UserServiceImpl implements UserService {
         }
         List<GrantedAuthority> authorities = user.getRoles()
                 .stream()
-                .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
+                .map(role-> new SimpleGrantedAuthority(role.getRoleName()))
                 .collect(Collectors.toList());
         return new org.springframework.security.core.userdetails.User(
                 user.getUserName(),user.getPassword(),user.isActive(),
@@ -80,7 +77,6 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserDTO converToDTO (User user){
-        List<RoleDTO> roles = new ArrayList<>();
         UserDTO userDTO = new UserDTO();
         userDTO.setUserID(user.getUserID());
         userDTO.setUserName(user.getUserName());
@@ -88,12 +84,9 @@ public class UserServiceImpl implements UserService {
         userDTO.setActive(user.isActive());
         userDTO.setCreated_Date(user.getCreated_Date());
         userDTO.setModified_Date(user.getModified_Date());
-        for (Role role :user.getRoles()){
-            RoleDTO roleDTO = new RoleDTO();
-            roleDTO.setRoleID(role.getRoleID());
-            roleDTO.setRoleName(role.getRoleName());
-            roles.add(roleDTO);
-        }
+        List<RoleDTO> roles = user.getRoles().stream()
+                .map(role -> new RoleDTO(role.getRoleID(),role.getRoleName()))
+                .collect(Collectors.toList());
         userDTO.setRoles(roles);
         return userDTO ;
     }
@@ -113,12 +106,9 @@ public class UserServiceImpl implements UserService {
         user.setActive(true);
         user.setModified_Date(userDTO.getModified_Date());
         user.setCreated_Date(userDTO.getCreated_Date());
-        for (RoleDTO roleDTO :userDTO.getRoles()){
-            Role role = new Role();
-            role.setRoleID(roleDTO.getRoleID());
-            role.setRoleName(roleDTO.getRoleName());
-            user.addRole(role);
-        }
+        user.setRoles(userDTO.getRoles().stream()
+                .map(role -> new Role(role.getRoleID(),role.getRoleName()))
+                .collect(Collectors.toList()));
         return user;
     }
 
