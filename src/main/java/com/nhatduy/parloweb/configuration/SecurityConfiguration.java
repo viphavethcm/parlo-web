@@ -4,6 +4,7 @@ import com.nhatduy.parloweb.filter.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -45,9 +46,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
-                .antMatchers("/v2/api-docs/").permitAll()
-                .antMatchers("/v2/authenticate")
-                .permitAll()
+                .antMatchers("/v2/api-docs/","/v2/authenticate").permitAll()
+                .antMatchers(HttpMethod.GET,"/v2/users/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/v2/categories/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/v2/categories/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/v2/users/**").hasRole("ADMIN")
                 .and().exceptionHandling().and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

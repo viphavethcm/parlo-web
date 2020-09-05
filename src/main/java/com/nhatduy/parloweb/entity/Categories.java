@@ -1,10 +1,6 @@
 package com.nhatduy.parloweb.entity;
 
-import org.springframework.lang.Nullable;
-
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "categories")

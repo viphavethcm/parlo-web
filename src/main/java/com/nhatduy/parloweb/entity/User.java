@@ -1,6 +1,7 @@
 package com.nhatduy.parloweb.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,9 +15,11 @@ public class User{
     @Column(name = "UserID")
     private int userID;
 
+    @NotNull(message = "Username not null")
     @Column(name = "UserName")
     private String userName;
 
+    @NotNull(message = "Password not null")
     @Column(name = "Password")
     private String password;
 
