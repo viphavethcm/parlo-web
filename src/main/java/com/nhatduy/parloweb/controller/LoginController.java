@@ -1,6 +1,5 @@
 package com.nhatduy.parloweb.controller;
 
-import com.nhatduy.parloweb.constants.SystemConstants;
 import com.nhatduy.parloweb.entity.AuthRequest;
 import com.nhatduy.parloweb.entity.AuthResponse;
 import com.nhatduy.parloweb.entity.User;
