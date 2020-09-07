@@ -39,7 +39,7 @@ public class CategoriesController {
             @ApiResponse(code = 400,message = "Something went wrong"),
     })
     public ResponseEntity<?> addCategories(@RequestBody CategoriesDTO categoriesDTO){
-        if (SystemUtils.PATTERN_SPECIAL_CHARACTER_NUMBERS(categoriesDTO.getTitle())){
+        if (SystemUtils.PATTERN_ADD_STRING(categoriesDTO.getTitle())){
             categoriesDTO.setID(0);
             categoriesService.save(categoriesDTO);
             return new ResponseEntity<>(
@@ -52,7 +52,7 @@ public class CategoriesController {
     @PutMapping("/categories")// Update Categories
     @ApiOperation(value = "Update Categories")
     public ResponseEntity<?> updateCategories(@RequestBody CategoriesDTO categoriesDTO){
-        if (SystemUtils.PATTERN_SPECIAL_CHARACTER_NUMBERS(categoriesDTO.getTitle())){
+        if (SystemUtils.PATTERN_ADD_STRING(categoriesDTO.getTitle())){
             categoriesService.save(categoriesDTO);
             return new ResponseEntity<>(
                     new StatusResponse(SystemConstants.MESSAGE_200,System.currentTimeMillis()),HttpStatus.OK);

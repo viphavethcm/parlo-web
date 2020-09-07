@@ -24,7 +24,7 @@ public class SystemUtils {
             return false;
     }
 
-    public static boolean PATTERN_SPECIAL_CHARACTER_NUMBERS(String data){
+    public static boolean PATTERN_ADD_STRING(String data){
         String PATTERN = "^([^0-9`~!@#$%^&*()_+={}\\[\\]|\\\\:;“’<,>.?๐฿])*$";
         Pattern check = Pattern.compile(PATTERN,Pattern.UNICODE_CHARACTER_CLASS);
         if (check.matcher(data).matches()){

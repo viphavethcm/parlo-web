@@ -1,12 +1,11 @@
 package com.nhatduy.parloweb.controller;
 
+import com.nhatduy.parloweb.constants.SystemConstants;
 import com.nhatduy.parloweb.entity.AuthRequest;
 import com.nhatduy.parloweb.entity.AuthResponse;
 import com.nhatduy.parloweb.entity.User;
-import com.nhatduy.parloweb.entity.StatusResponse;
-import com.nhatduy.parloweb.service.ProtectService;
+import com.nhatduy.parloweb.exception.UserNotFoundException;
 import com.nhatduy.parloweb.service.UserService;
-import com.nhatduy.parloweb.serviceImpl.ProtectServiceImpl;
 import com.nhatduy.parloweb.utils.HeaderUtils;
 import com.nhatduy.parloweb.utils.JwtUtil;
 import io.swagger.annotations.Api;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -41,34 +39,27 @@ public class LoginController {
     @PostMapping("/authenticate")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK"),
-            @ApiResponse(code = 502, message = "Invalid Username or Password")
+            @ApiResponse(code = 400, message = "Something went wrong")
     })
     public ResponseEntity<?> createAuthenticationToken(HttpSession session, @RequestBody AuthRequest authRequest) throws Exception {
-        ProtectService protectService = new ProtectServiceImpl();
-        ResponseEntity responseEntity = null;
-        if (protectService.SQL_Injection(authRequest) == false) {
             try {
                 authenticationManager.authenticate(
                         new UsernamePasswordAuthenticationToken(authRequest.getUserName(), authRequest.getPassword())
                 );
-            } catch (BadCredentialsException e) {
-                throw new Exception("Invalid Username or Password", e);
+            } catch (Exception e) {
+                throw new UserNotFoundException(SystemConstants.MESSAGE_USER_NOT_FOUND);
             }
             // check UseDetails
             final UserDetails userDetails = userService.loadUserByUsername(authRequest.getUserName());
             // if Not null --> set Token and Cookie through JSESSIONID
             if (userDetails != null) {
                 final String token = jwtUtil.generateToken(userDetails);
-                responseEntity =new ResponseEntity<>(new AuthResponse(authRequest.getUserName(),token),
+                return new ResponseEntity<>(new AuthResponse(authRequest.getUserName(),token),
                                                         HeaderUtils.getInstance().setHeaders(), HttpStatus.OK);
             }// if null --> return UserError
             else {
-                responseEntity = new ResponseEntity<>(
-                        new StatusResponse("Invalid Username or Password", System.currentTimeMillis()), HttpStatus.BAD_GATEWAY);
+                throw new UserNotFoundException(SystemConstants.MESSAGE_USER_NOT_FOUND);
             }
         }
-        return responseEntity;
-    }
-
 }
 
