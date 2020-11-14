@@ -29,12 +29,17 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+<<<<<<< HEAD
     public List<UserDTO> findAll() {
         List<UserDTO> listDTO = new ArrayList<>();
         for (User user:userRepository.findAll()){
             listDTO.add(converToDTO(user));
         }
         return listDTO;
+=======
+    public List<User> findAll() {
+        return userRepository.findAll();
+>>>>>>> master
     }
 
     @Override
