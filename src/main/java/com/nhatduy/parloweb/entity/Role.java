@@ -7,20 +7,18 @@ import java.util.List;
 
 @Entity
 @Table(name = "role")
-@JsonIgnoreProperties("users")
 public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "roleID")
+    @Column(name = "role_Id")
     private int roleID;
 
-    @Column(name = "roleName")
+    @Column(name = "RoleName")
     private String roleName;
 
     @ManyToMany(mappedBy = "roles",fetch = FetchType.LAZY,
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-                    CascadeType.DETACH, CascadeType.REFRESH})
+            cascade = { CascadeType.MERGE,CascadeType.REFRESH})
     private List<User> users;
 
     public int getRoleID() {
